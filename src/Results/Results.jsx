@@ -69,12 +69,11 @@ const Results = () => {
             <div className="absolute top-28 left-1/2 transform -translate-x-1/2 pb-5 justify-center items-center text-white font-bold text-6xl">
                 <u>Election Results</u>
             </div>
-            <div className="absolute top-52 left-1/2 transform -translate-x-1/2 bg-slate-500 w-2/3 rounded-xl shadow ">
+            <div className="absolute top-52 mb-10 left-1/2 transform -translate-x-1/2 bg-slate-500 w-2/3 rounded-xl shadow ">
                 <div className="flex flex-col justify-center items-center text-white font-bold">
                     <u className="text-6xl mt-3">Winner</u>
                     <p className="text-5xl mt-6 mb-2">{winner}</p>
                     <CandidateImage name={winner}/>
-                    {data ? (<LineAndBarGraph data={data} labels={labels} />) : (<div></div>)}
                 </div>
             </div>
         </div>
