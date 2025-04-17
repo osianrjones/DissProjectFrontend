@@ -1,10 +1,23 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {Button, IconButton, Grow, Paper, Popper, MenuItem, MenuList, ClickAwayListener, Tooltip} from '@mui/material';
+import {
+    Button,
+    IconButton,
+    Grow,
+    Paper,
+    Popper,
+    MenuItem,
+    MenuList,
+    ClickAwayListener,
+    Tooltip,
+    Portal
+} from '@mui/material';
 import { Home as HomeIcon, People as PeopleIcon, Info as InfoIcon, AccountCircle as AccountCircleIcon } from '@mui/icons-material';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import {Outlet, Link, useLocation, useNavigate} from "react-router-dom";
 import PollIcon from "@mui/icons-material/Poll";
 import HelpIcon from '@mui/icons-material/Help';
+import LogoutIcon from '@mui/icons-material/Logout';
+
 import {getContractInstance} from "../Helper_Functions/ContractConnection";
 import NotificationBell from "../Helper_Components/NotificationBell";
 import {setupRegistrationListener} from "../Helper_Functions/RegistrationListener";
@@ -12,6 +25,7 @@ import {setupTokenListener} from "../Helper_Functions/TokenListener";
 import {tokenBalance} from "../Helper_Functions/TokenBalance";
 import approve from "../Helper_Functions/ApproveToken";
 import {tokenAllowance} from "../Helper_Functions/TokenAllowance";
+import {usePopper} from "react-popper";
 
 export default function Navbar({ logo, page, complete }) {
     const [selectedButton, setSelectedButton] = useState('home');
@@ -25,7 +39,36 @@ export default function Navbar({ logo, page, complete }) {
     const [balance, setBalance] = useState(0);
     const tooltip = "Once registered, you will receive a voting token which can be used to cast your vote."
 
+    let [referenceElement, setReferenceElement] = useState()
+    let [popperElement, setPopperElement] = useState()
+
+    let { styles, attributes } = usePopper(referenceElement, popperElement,
+        { placement: "bottom-start",
+        modifiers: [
+        {
+            name: 'offset',
+            options: {
+                offset: [-360, 10],
+            },
+        },
+        {
+            name: 'preventOverflow',
+            options: {
+                boundary: 'viewport',
+                padding: 24,
+            },
+        },
+        {
+            name: 'flip',
+            options: {
+                fallbackPlacements: ['top-start', 'top-end', 'left', 'right'],
+            },
+        },
+        ],
+    });
+
     useEffect(() => {
+        document.getElementById("composition-button").click();
         async function fetchBalance(accountNumber) {
             if (accountNumber !== undefined) {
                 const balance = await tokenAllowance(accountNumber);
@@ -64,10 +107,16 @@ export default function Navbar({ logo, page, complete }) {
         }
     }, [location, navigate, page])
 
+
     useEffect(() => {
         window.sessionStorage.setItem("accountNumber", accountNumber);
     }, [accountNumber]);
 
+
+    function handleLogout() {
+        window.localStorage.clear();
+        navigate('/')
+    }
 
     const handleClick = (button) => {
         setSelectedButton(button);
@@ -156,47 +205,32 @@ export default function Navbar({ logo, page, complete }) {
                         <Tooltip title={tooltip}><HelpIcon></HelpIcon></Tooltip><p>Token Balance: <span id="balance">{balance}</span></p>
                     </div>
                 </div>
-                <IconButton
-                    ref={anchorRef}
-                    id="composition-button"
-                    aria-label="account"
-                    onClick={handleToggle}
-                    className="ml-4 w-24 h-24 border-2 border-slate-500 rounded-full bg-neutral-200"
-                >
-                    <AccountCircleIcon className="text-white border-2 border-slate-500" sx={{ fontSize: 60 }} />
-                </IconButton>
-                <Popper
-                    open={open}
-                    anchorEl={anchorRef.current}
-                    role={undefined}
-                    placement="bottom-end"
-                    transition
-                    disablePortal
-                >
-                    {({ TransitionProps, placement }) => (
-                        <Grow
-                            {...TransitionProps}
-                            style={{
-                                transformOrigin: placement === 'bottom-end' ? 'right top' : 'right bottom',
-                            }}
-                        >
-                            <Paper>
-                                <ClickAwayListener onClickAway={handleClose}>
-                                    <MenuList
-                                        autoFocusItem={open}
-                                        id="composition-menu"
-                                        aria-labelledby="composition-button"
-                                        onKeyDown={handleListKeyDown}
-                                    >
-                                        <MenuItem onClick={handleClose}>Profile</MenuItem>
-                                        <MenuItem onClick={handleClose}>My account</MenuItem>
-                                        <MenuItem onClick={handleClose}>Logout</MenuItem>
-                                    </MenuList>
-                                </ClickAwayListener>
-                            </Paper>
-                        </Grow>
-                    )}
-                </Popper>
+                <div className="relative" ref={setReferenceElement}>
+                    <IconButton
+                        ref={anchorRef}
+                        id="composition-button"
+                        aria-label="account"
+                        onClick={handleToggle}
+                        className="ml-4 w-24 h-24 border-2 border-slate-500 rounded-full bg-neutral-200"
+                    >
+                        <AccountCircleIcon className="text-white border-2 border-slate-500" sx={{ fontSize: 60 }} />
+                    </IconButton>
+                    {/*New account popup here*/}
+                    <Portal>
+                        <div className="absolute z-40 top-14 right-5 bg-gray-300 h-32
+                        rounded-xl w-3/12 shadow-lg font-bold text-slate-600 overflow-hidden"
+                        ref={setPopperElement}
+                        style={styles.popper}
+                             {...attributes}
+                        hidden={!open}>
+                            <div className="flex flex-col space-y-8">
+                                <p className="ml-5 mt-3">Connected blockchain account: <span className="italic">{accountNumber}</span></p>
+                                <button className="border border-red-700 w-1/3 ml-5
+                                rounded-xl text-white text-xl bg-red-700" onClick={() => handleLogout()}>Logout<LogoutIcon className="ml-2"/></button>
+                            </div>
+                        </div>
+                    </Portal>
+                </div>
             </div>
         </nav>
     );
