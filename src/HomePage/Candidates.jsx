@@ -8,6 +8,7 @@ import PollIcon from "@mui/icons-material/Poll";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {useInView} from "react-intersection-observer";
+import {getAbout} from "../Helper_Functions/MeetCandidates";
 
 const Candidates = ({accountNumber}) => {
     const navigate = useNavigate();
@@ -59,7 +60,7 @@ const Candidates = ({accountNumber}) => {
              proposals.map((proposal, index) => (
                  index % 2 == 0 ? (
                      <div className="odd relative">
-                         <ProposalOdd key={index} name={proposal} account={accountNumber}/>
+                         <ProposalOdd key={index} index={index} name={proposal} account={accountNumber}/>
                          <div className="absolute bottom-0">
                              <Box
                                  component="img"
@@ -69,7 +70,7 @@ const Candidates = ({accountNumber}) => {
                      </div>
                  ) : (
                      <div className="even relative">
-                         <ProposalEven key={index} name={proposal} account={accountNumber}/>
+                         <ProposalEven key={index} index={index} name={proposal} account={accountNumber}/>
                          <div className="absolute bottom-0">
                              <Box
                                  component="img"
@@ -85,7 +86,7 @@ const Candidates = ({accountNumber}) => {
 
 }
 
-const ProposalOdd = ({name, account}) => {
+const ProposalOdd = ({index, name, account}) => {
     const {ref, inView} = useInView({
         threshold: 0.3,
     });
@@ -109,13 +110,7 @@ const ProposalOdd = ({name, account}) => {
                      className="rounded-lg shadow h-5/6 object-cover mt-2 mb-2"/>
             </div>
             <div className="proposal absolute top-4 right-4 m-4 mr-14 text-5xl text-white font-bold">{name}</div>
-            <div className="absolute right-0 top-24 w-1/2 h-1/2 text-white text-xl">Lorem Ipsum is simply dummy text of
-                the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever
-                since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen
-                book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining
-                essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
-                Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including
-                versions of Lorem Ipsum.
+            <div className="absolute right-0 top-24 w-1/2 h-1/2 text-white text-xl">{getAbout(index)?.about}
             </div>
             <div className="absolute bottom-0 right-0 m-10 transition-transform duration-300 hover:scale-105">
                 <Link to="/vote" state={{accountNumber: account}}>
@@ -131,7 +126,7 @@ const ProposalOdd = ({name, account}) => {
     );
 };
 
-const ProposalEven = ({name, account}) => {
+const ProposalEven = ({index, name, account}) => {
     const {ref, inView} = useInView({
         threshold: 0.3,
     });
@@ -155,13 +150,7 @@ const ProposalEven = ({name, account}) => {
                      className="rounded-lg shadow h-5/6 object-cover mt-1 mb-1"/>
             </div>
             <div className="proposal absolute top-4 left-4 m-4 ml-14 text-5xl text-white font-bold">{name}</div>
-            <div className="absolute left-1 top-24 w-1/2 h-1/2 text-white text-xl">Lorem Ipsum is simply dummy text of
-                the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever
-                since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen
-                book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining
-                essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
-                Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including
-                versions of Lorem Ipsum.
+            <div className="absolute left-1 top-24 w-1/2 h-1/2 text-white text-xl">{getAbout(index)?.about}
             </div>
             <div className="absolute bottom-0 left-0 m-10 transition-transform duration-300 hover:scale-105">
                 <Link to="/vote" state={{accountNumber: account}}>

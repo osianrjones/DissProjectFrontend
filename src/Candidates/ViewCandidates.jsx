@@ -8,6 +8,7 @@ import {getContractInstance} from "../Helper_Functions/ContractConnection";
 import {AdsClick, Close, HowToVote, NavigateNext, Search} from "@mui/icons-material";
 import {Box, Button, IconButton, InputAdornment, Modal, TextField} from "@mui/material";
 import {Link, useLocation} from "react-router-dom";
+import {getProposals} from "../Helper_Functions/CandidateProposals";
 
 const ViewCandidates = () => {
     const [proposals, setProposals] = useState(null);
@@ -57,7 +58,7 @@ const ViewCandidates = () => {
     const CandidateImage = ({name}) => {
         try {
             const imagePath = require(`../resources/${name}.jpg`);
-            return <img src={imagePath} alt={name} />;
+            return <img src={imagePath} alt={name} className="h-80 w-80" />;
         } catch (error) {
             console.error(error);
         }
@@ -100,18 +101,21 @@ const ViewCandidates = () => {
                             {filteredCandidates ? (
                                 filteredCandidates.map((proposal, index) => (
                                         <div className="relative h-full bg-slate-500 rounded-xl transition-transform duration-300 hover:scale-105 cursor-pointer" onClick={() => handleOpenModal(index)}>
-                                            <div className="flex flex-col h-full w-1/2 rounded-2xl mt-5 ml-5">
-                                            <CandidateImage name={proposal}/>
-                                            </div>
-                                            <div
-                                                className="absolute top-4 right-4 m-4 mr-14 text-5xl text-white font-bold">{proposal}</div>
-                                            <div className="absolute top-20 right-4 m-4 mr-20 text-xl text-white">
-                                                Key Proposals:
-                                                <ul className="list-disc">
-                                                    <li>First</li>
-                                                    <li>Second</li>
-                                                    <li>Third</li>
-                                                </ul>
+
+                                            <div className="flex flex-row h-full p-5 mt-20">
+                                                {/* Top row for image */}
+                                                <div className="flex justify-center items-center h-3/5 mt-2 mb-2">
+                                                    <CandidateImage name={proposal} className="max-h-full max-w-full object-contain rounded-lg" />
+                                                </div>
+                                                {/* Bottom row for proposals */}
+                                                <div className="h-2/5">
+                                                    <h3 className="absolute top-10 ml-10 text-white font-bold text-3xl">{proposal}</h3>
+                                                    <ul className="list-disc pl-5 text-white ml-5">
+                                                        <li>{getProposals(index).proposals[0]}</li>
+                                                        <li>{getProposals(index).proposals[1]}</li>
+                                                        <li>{getProposals(index).proposals[2]}</li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
                                     )

@@ -1,6 +1,6 @@
+import Register from "../Registration/Register";
 const { render, screen, fireEvent, waitFor } = require("@testing-library/react");
 const { MemoryRouter } = require("react-router-dom");
-const Register = require("../Registration/Register");
 
 // Mock useNavigate
 const mockNavigate = jest.fn();
@@ -24,7 +24,7 @@ test("renders Register component with wallet selection", async () => {
         </MemoryRouter>
     );
 
-    await screen.findByText(/Registration/i);
+    await screen.findAllByText(/Registration/i);
     expect(screen.getByText(/Wallet address to register:/i)).toBeInTheDocument();
     expect(screen.getByText(/Not currently registered/i)).toBeInTheDocument();
 });

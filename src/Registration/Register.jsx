@@ -20,11 +20,9 @@ import PollIcon from "@mui/icons-material/Poll";
 import DoneIcon from "@mui/icons-material/Done";
 import Footer from "../HomePage/Footer";
 import Web3 from "web3";
-import DialogContext from "@mui/material/Dialog/DialogContext";
 import LoadingPopup from "../Helper_Components/LoadingPopup";
 import {setupRegistrationListener} from "../Helper_Functions/RegistrationListener";
 import {setupTokenListener} from "../Helper_Functions/TokenListener";
-import registration from "tailwind/dist/wires/api/http/v1/wsPostRead";
 
 
 const Register = () => {

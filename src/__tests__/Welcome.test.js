@@ -1,7 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import Welcome from "../HomePage/Welcome";
-import Web3 from "web3";
+import Welcome from "../HomePage/Welcome.jsx";
 
 // Mock dependencies
 jest.mock("react-router-dom", () => ({
@@ -30,7 +29,7 @@ describe("Welcome Component", () => {
     test("renders correctly before the election ends", async () => {
         render(
             <MemoryRouter>
-                <Welcome />
+                <Welcome/>
             </MemoryRouter>
         );
 

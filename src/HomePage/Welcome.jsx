@@ -1,12 +1,9 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import Countdown from './Countdown'
-import Login from '../LandingPage/Login';
 import React, { useEffect, useState } from 'react';
 import NavBar from './NavBar';
-import Register from '../Registration/Register';
 import Candidates from './Candidates';
 import logo from '../resources/logo.png'
-import {Button} from "@mui/material";
 import greenSwirl from '../resources/greenSwirl.jpg';
 import Footer from "./Footer";
 import ShowCandidates from "./ShowCandidates";
