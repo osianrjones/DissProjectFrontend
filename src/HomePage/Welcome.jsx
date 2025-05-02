@@ -15,7 +15,7 @@ const Welcome = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [accountNumber, setAccountNumber] = useState(null);
-    const targetDate = new Date('2025-05-01T23:59:59');
+    const targetDate = new Date('2025-06-01T23:59:59');
     const [electionComplete, setElectionComplete] = useState(false);
 
     useEffect(() => {
